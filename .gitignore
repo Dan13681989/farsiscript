@@ -21,3 +21,12 @@ test_import
 test_persian_digits
 test_try
 test_try2
+add_stdlib.py
+finalize.py
+fix_*.py
+insert_helpers*.py
+patch_*.py
+gen_compiler.py
+*.pyn
+test_dict_iter
+farsiscript
