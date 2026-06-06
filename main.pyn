@@ -1,0 +1,40 @@
+import sys
+from tokenizer import Lexer
+from parser import Parser
+from evaluator import Environment, evaluate
+
+def run_farsi_script(source_code):
+    lexer = Lexer(source_code)
+    try:
+        tokens = lexer.tokenize()
+    except Exception as e:
+        print(e)
+        return
+    parser = Parser(tokens)
+    try:
+        ast = parser.parse_program()
+    except SyntaxError as e:
+        print(e)
+        return
+    env = Environment()
+    functions = {}
+    for stmt in ast:
+        evaluate(stmt, env, functions)
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        with open(sys.argv[1], 'r', encoding='utf-8') as f:
+            code = f.read()
+        run_farsi_script(code)
+    else:
+        while True:
+            try:
+                line = input('> ')
+                if line.strip() == '':
+                    continue
+                run_farsi_script(line)
+            except EOFError:
+                break
+            except KeyboardInterrupt:
+                break
+

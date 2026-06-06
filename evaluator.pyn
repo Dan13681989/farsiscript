@@ -1,0 +1,119 @@
+from parser import PrintNode, IfNode, AssignNode, BinOpNode, NumberNode, 
+VarNode, WhileNode, StringNode, FunctionNode, CallNode, ReturnNode
+
+class Environment:
+    def __init__(self, parent=None):
+        self.vars = {}
+        self.parent = parent
+
+    def get(self, name):
+        if name in self.vars:
+            return self.vars[name]
+        if self.parent:
+            return self.parent.get(name)
+        return 0
+
+    def set(self, name, value):
+        self.vars[name] = value
+
+    def set_local(self, name, value):
+        self.vars[name] = value
+
+class Function:
+    def __init__(self, params, body, env):
+        self.params = params
+        self.body = body
+        self.env = env
+
+def evaluate(node, env, functions=None):
+    if functions is None:
+        functions = {}
+
+    if isinstance(node, PrintNode):
+        val = evaluate(node.expr, env, functions)
+        print(val)
+        return None
+    elif isinstance(node, IfNode):
+        cond = evaluate(node.cond, env, functions)
+        if cond != 0:
+            for stmt in node.then_block:
+                evaluate(stmt, env, functions)
+        elif node.else_block:
+            for stmt in node.else_block:
+                evaluate(stmt, env, functions)
+        return None
+    elif isinstance(node, AssignNode):
+        val = evaluate(node.expr, env, functions)
+        env.set(node.name, val)
+        return None
+    elif isinstance(node, BinOpNode):
+        left = evaluate(node.left, env, functions)
+        if node.op == 'AND':
+            return 1 if (left != 0 and evaluate(node.right, env, functions) != 0) else 0
+        if node.op == 'OR':
+            return 1 if (left != 0 or evaluate(node.right, env, functions) != 0) else 0
+        right = evaluate(node.right, env, functions)
+        if node.op == 'PLUS':
+            # Auto‑convert numbers to strings when one operand is a string
+            if isinstance(left, str) or isinstance(right, str):
+                return str(left) + str(right)
+            else:
+                return left + right
+        elif node.op == 'MINUS':
+            return left - right
+        elif node.op == 'MUL':
+            return left * right
+        elif node.op == 'DIV':
+            return left // right
+        elif node.op == 'GT':
+            return 1 if left > right else 0
+        elif node.op == 'LT':
+            return 1 if left < right else 0
+        elif node.op == 'EQ':
+            return 1 if left == right else 0
+        elif node.op == 'GE':
+            return 1 if left >= right else 0
+        elif node.op == 'LE':
+            return 1 if left <= right else 0
+        elif node.op == 'NE':
+            return 1 if left != right else 0
+        else:
+            raise Exception(f"عملگر '{node.op}' شناخته شده نیست")
+    elif isinstance(node, RealNode):
+        return node.value
+    elif isinstance(node, NumberNode):
+        return node.value
+    elif isinstance(node, VarNode):
+        return env.get(node.name)
+    elif isinstance(node, StringNode):
+        return node.value
+    elif isinstance(node, WhileNode):
+        while evaluate(node.cond, env, functions) != 0:
+            for stmt in node.body:
+                evaluate(stmt, env, functions)
+        return None
+    elif isinstance(node, FunctionNode):
+        functions[node.name] = Function(node.params, node.body, env)
+        return None
+    elif isinstance(node, CallNode):
+        func = functions.get(node.name)
+        if not func:
+            raise Exception(f"تابع '{node.name}' تعریف نشده است")
+        call_env = Environment(func.env)
+        if len(node.args) != len(func.params):
+            raise Exception(f"تعداد آرگومان‌های تابع '{node.name}' صحیح نیست")
+        for param, arg_expr in zip(func.params, node.args):
+            arg_val = evaluate(arg_expr, env, functions)
+            call_env.set_local(param, arg_val)
+        result = None
+        for stmt in func.body:
+            result = evaluate(stmt, call_env, functions)
+            if isinstance(stmt, ReturnNode):
+                return result
+        return result
+    elif isinstance(node, ReturnNode):
+        return evaluate(node.expr, env, functions)
+    else:
+        raise Exception(f"نوع دستوری ناشناخته: {type(node)}")
+# Ensure evaluator.py has Persian error messages
+# (the existing file already uses Persian for most, but we'll add one more)
