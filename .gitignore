@@ -30,3 +30,9 @@ gen_compiler.py
 *.pyn
 test_dict_iter
 farsiscript
+*.c
+*.out
+*.exe
+test_*
+examples/*.c
+__pycache__/

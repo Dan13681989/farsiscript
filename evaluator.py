@@ -208,6 +208,27 @@ def evaluate(node, env, functions):
             return getpass.getpass('')
         elif node.name == '\u062e\u0631\u0648\u062c\u06cc':
             import subprocess
+        elif node.name == '\u0631\u06cc\u0634\u0647_\u062f\u0648\u0645':
+            import math
+            return math.sqrt(evaluate(node.args[0], env, functions))
+        elif node.name == '\u0642\u062f\u0631_\u0645\u0637\u0644\u0642':
+            return abs(evaluate(node.args[0], env, functions))
+        elif node.name == '\u0633\u0642\u0641':
+            import math
+            return math.ceil(evaluate(node.args[0], env, functions))
+        elif node.name == '\u06a9\u0641':
+            import math
+            return math.floor(evaluate(node.args[0], env, functions))
+        elif node.name == '\u0637\u0648\u0644_\u0631\u0634\u062a\u0647':
+            arg = evaluate(node.args[0], env, functions)
+            if isinstance(arg, str): return len(arg)
+            raise Exception('آرگومان باید رشته باشد')
+        elif node.name == '\u0628\u0632\u0631\u06af\u200c\u06a9\u0646':
+            arg = evaluate(node.args[0], env, functions)
+            return str(arg).upper()
+        elif node.name == '\u06a9\u0648\u0686\u06a9\u200c\u06a9\u0646':
+            arg = evaluate(node.args[0], env, functions)
+            return str(arg).lower()
             cmd = evaluate(node.args[0], env, functions)
             return subprocess.getoutput(cmd)
         elif node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632':

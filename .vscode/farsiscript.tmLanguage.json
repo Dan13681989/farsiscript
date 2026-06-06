@@ -1,0 +1,28 @@
+{
+  "scopeName": "source.farsi",
+  "patterns": [
+    {
+      "name": "comment.line.double-slash.farsi",
+      "match": "//.*"
+    },
+    {
+      "name": "string.quoted.double.farsi",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "constant.numeric.farsi",
+      "match": "\\b[0-9]+\\b"
+    },
+    {
+      "name": "keyword.control.farsi",
+      "match": "\\b(اگر|درغیراینصورت|تاوقتی|برای|بشکن|ادامه|برگردان|سعی کن|بگیر|استفاده از|کلاس|این)\\b"
+    },
+    {
+      "name": "entity.name.function.farsi",
+      "match": "\\b(تابع|چاپ|خواندن|خواندن_فایل|نوشتن_فایل|طول|نوع|تبدیل_به_عدد|تبدیل_به_رشته|خطا_بده|زمان_اکنون|عدد_تصادفی|اجرا|خروجی|تاریخ_امروز|ورودی_پنهان|ریشه_دوم|قدر_مطلق|سقف|کف|طول_رشته|بزرگ_کن|کوچک_کن)\\b"
+    }
+  ],
+  "repository": {},
+  "injections": {}
+}
