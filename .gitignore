@@ -7,4 +7,17 @@ __pycache__/
 test_stdlib
 test_class
 test_dict
+test_dict_iter
 test_newlib
+test_advanced
+test_compile
+test_convert
+test_files
+test_final
+test_for
+test_functions
+test_functions_c
+test_import
+test_persian_digits
+test_try
+test_try2
