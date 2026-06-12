@@ -64,10 +64,6 @@ def compile_to_c(code, output_c_file):
         if isinstance(node, CallNode):
             if node.name == '\u0637\u0648\u0644': return 'double'
             if node.name == '\u0646\u0648\u0639': return 'string'
-            if node.name == '\u0637\u0648\u0644_\u0622\u0631\u0627\u06cc\u0647': return 'int'
-            if node.name == '\u0637\u0648\u0644_\u0622\u0631\u0627\u06cc\u0647':
-                arr = gen_expr(node.args[0], func_name, local_vars, decls)
-                return f'array_len({arr})'
             if node.name == '\u062e\u0648\u0627\u0646\u062f\u0646_\u0641\u0627\u06cc\u0644': return 'string'
             if node.name == '\u0646\u0648\u0634\u062a\u0646_\u0641\u0627\u06cc\u0644': return 'void'
             if node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0639\u062f\u062f': return 'double'
@@ -76,18 +72,6 @@ def compile_to_c(code, output_c_file):
             if node.name == '\u0632\u0645\u0627\u0646_\u0627\u06a9\u0646\u0648\u0646': return 'string'
             if node.name == '\u0639\u062f\u062f_\u062a\u0635\u0627\u062f\u0641\u06cc': return 'int'
             if node.name == '\u0627\u062c\u0631\u0627': return 'int'
-            if node.name == '\u0641\u0631\u0645\u062a_\u062a\u0627\u0631\u06cc\u062e': return 'string'
-            if node.name == '\u062a\u06a9\u0631\u0627\u0631_\u0631\u0634\u062a\u0647': return 'string'
-            if node.name == '\u0646\u0648\u0639': return 'string'
-            if node.name == '\u0646\u0648\u0639':
-                arg = node.args[0]
-                typ = infer_type(arg)
-                return f'"{typ}"'
-            if node.name == '\u062a\u06a9\u0631\u0627\u0631_\u0631\u0634\u062a\u0647':
-                s = gen_expr(node.args[0], func_name, local_vars, decls)
-                n = gen_expr(node.args[1], func_name, local_vars, decls)
-                return f'str_repeat({s}, {n})'
-            if node.name == '\u0641\u0631\u0645\u062a_\u062a\u0627\u0631\u06cc\u062e': return 'string'
             if node.name == '\u0632\u0645\u0627\u0646_\u0627\u06a9\u0646\u0648\u0646': return 'string'
             if node.name == '\u0639\u062f\u062f_\u062a\u0635\u0627\u062f\u0641\u06cc': return 'int'
             if node.name == '\u0627\u062c\u0631\u0627': return 'int'
@@ -366,38 +350,6 @@ def compile_to_c(code, output_c_file):
         '    s[strlen(s)-1] = \'\\0\';\n'
         '    return s;\n'
         '}\n\n'
-
-char* format_date(const char* fmt) {
-    time_t now = time(NULL);
-    struct tm* t = localtime(&now);
-    static char buf[100];
-    strftime(buf, sizeof(buf), fmt, t);
-    return buf;
-}
-
-char* str_repeat(const char* s, int n) {
-    if (n <= 0) return "";
-    size_t len = strlen(s);
-    char* res = (char*)malloc(n * len + 1);
-    for (int i = 0; i < n; i++) memcpy(res + i*len, s, len);
-    res[n*len] = '\0';
-    return res;
-}
-
-int array_len(void* arr) {
-    if (!arr) return 0;
-    return ((int*)arr)[-1];
-}
-
-
-char* format_date(const char* fmt) {
-    time_t now = time(NULL);
-    struct tm* t = localtime(&now);
-    static char buf[100];
-    strftime(buf, sizeof(buf), fmt, t);
-    return buf;
-}
-
         'char* current_date() {\n'
         '    time_t now = time(NULL);\n'
         '    struct tm* t = localtime(&now);\n'
@@ -501,12 +453,6 @@ char* format_date(const char* fmt) {
                 return f'((rand() % (int)({high} - {low} + 1)) + (int){low})'
             if node.name == '\u0627\u062c\u0631\u0627':
                 cmd = gen_expr(node.args[0], func_name, local_vars, decls)
-            if node.name == '\u0641\u0631\u0645\u062a_\u062a\u0627\u0631\u06cc\u062e':
-                fmt = gen_expr(node.args[0], func_name, local_vars, decls)
-                return f'format_date({fmt})'
-            if node.name == '\u0641\u0631\u0645\u062a_\u062a\u0627\u0631\u06cc\u062e':
-                fmt = gen_expr(node.args[0], func_name, local_vars, decls)
-                return f'format_date({fmt})'
                 return f'system({cmd})'
             if node.name == '\u062e\u0631\u0648\u062c\u06cc':
                 cmd = gen_expr(node.args[0], func_name, local_vars, decls)
