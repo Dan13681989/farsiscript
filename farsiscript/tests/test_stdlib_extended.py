@@ -62,3 +62,15 @@ if __name__ == '__main__':
 
     def test_array_len(self):
         self.run_code('چاپ طول_آرایه([1,2,3]);')
+
+    def test_format_date(self):
+        self.run_code('چاپ فرمت_تاریخ("امروز %Y/%m/%d");')
+
+    def test_str_repeat(self):
+        self.run_code('چاپ تکرار_رشته("ها", 3);')
+
+    def test_typeof(self):
+        self.run_code('x = 10; چاپ نوع(x);')
+
+    def test_array_len(self):
+        self.run_code('چاپ طول_آرایه([1,2,3]);')
