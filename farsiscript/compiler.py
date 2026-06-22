@@ -83,6 +83,7 @@ def compile_to_c(code, output_c_file):
             if node.name == '\u0644\u06cc\u0633\u062a_\u0641\u0627\u06cc\u0644_\u0647\u0627': return 'string'
 
             if node.name == '\u062d\u0630\u0641_\u0641\u0627\u06cc\u0644': return 'int'
+            if node.name == '\u062f\u0631\u06cc\u0627\u0641\u062a_\u0627\u0632_\u0648\u0628': return 'string'
 
             if node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647': return 'string'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632': return 'string'
@@ -464,6 +465,9 @@ def compile_to_c(code, output_c_file):
                 return f'str_strip({gen_expr(node.args[0], func_name, local_vars, decls)})'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc':
                 return 'shamsi_date()'
+            if node.name == '\u062f\u0631\u06cc\u0627\u0641\u062a_\u0627\u0632_\u0648\u0628':
+                url = gen_expr(node.args[0], func_name, local_vars, decls)
+                return f'fetch_url({url})'
             if node.name == '\u062a\u0648\u0627\u0646':
 
                 base = gen_expr(node.args[0], func_name, local_vars, decls)
@@ -1006,6 +1010,21 @@ def compile_to_c(code, output_c_file):
 
     c_code += '}\n\n'
 
+    c_code += 'char* fetch_url(const char* url) {\n'
+    c_code += '    char cmd[1024];\n'
+    c_code += '    snprintf(cmd, sizeof(cmd), "curl -s \\"%s\\"", url);\n'
+    c_code += '    FILE* fp = popen(cmd, "r");\n'
+    c_code += '    if (!fp) return NULL;\n'
+    c_code += '    size_t size = 4096, len = 0;\n'
+    c_code += '    char* buf = (char*)malloc(size);\n'
+    c_code += '    while (!feof(fp)) {\n'
+    c_code += '        len += fread(buf+len, 1, size-len-1, fp);\n'
+    c_code += '        if (len >= size-1) { size *= 2; buf = realloc(buf, size); }\n'
+    c_code += '    }\n'
+    c_code += '    buf[len] = \'\\0\';\n'
+    c_code += '    pclose(fp);\n'
+    c_code += '    return buf;\n'
+    c_code += '}\n\n'
     c_code += 'int main() {\n'
     c_code += '    srand(time(NULL));\n'
     c_code += '    srand(time(NULL));\n'
