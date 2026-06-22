@@ -210,16 +210,10 @@ def evaluate(node, env, functions):
             return time.ctime()
         elif node.name == 'عدد_تصادفی':
             return random.randint(int(args[0]), int(args[1]))
-        elif node.name == 'اجرا':
-            return os.system(args[0])
-        elif node.name == 'فرمت_تاریخ':
-            return time.strftime(args[0], time.localtime())
-        elif node.name == 'تکرار_رشته':
-            return args[0] * int(args[1])
-        elif node.name == 'طول_آرایه':
-            return len(args[0])
-        elif node.name == 'نوع':
-            return typeof(args[0])
+        elif node.name == '\u0627\u062c\u0631\u0627':
+            import subprocess
+            cmd = args[0]
+            return subprocess.getoutput(cmd)
         # --- User-defined functions ---
         elif node.name == '\u062e\u0648\u0627\u0646\u062f\u0646_\u0641\u0627\u06cc\u0644':
             with open(args[0], 'r', encoding='utf-8') as f:
