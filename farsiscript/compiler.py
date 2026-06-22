@@ -73,6 +73,7 @@ def compile_to_c(code, output_c_file):
             if node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647': return 'string'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632': return 'string'
             if node.name == '\u062d\u0630\u0641_\u0641\u0627\u0635\u0644\u0647': return 'string'
+            if node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647': return 'string'
             if node.name == '\u0632\u0645\u0627\u0646_\u0627\u06a9\u0646\u0648\u0646': return 'string'
             if node.name == '\u0639\u062f\u062f_\u062a\u0635\u0627\u062f\u0641\u06cc': return 'int'
             if node.name == '\u0627\u062c\u0631\u0627': return 'int'
