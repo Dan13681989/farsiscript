@@ -1,6 +1,4 @@
 import sys, os, unittest
-
-# Ensure the parent directory (project root) is in sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from farsiscript.main import run_farsi_script
@@ -36,41 +34,17 @@ class TestExtendedStdlib(unittest.TestCase):
     def test_lower(self):
         self.run_code('چاپ کوچککن("HELLO");')
 
+    def test_format_date(self):
+        self.run_code('چاپ فرمت_تاریخ("امروز %Y/%m/%d");')
+
+    def test_str_repeat(self):
+        self.run_code('چاپ تکرار_رشته("ها", 3);')
+
+    def test_typeof(self):
+        self.run_code('x = 10; چاپ نوع(x);')
+
+    def test_array_len(self):
+        self.run_code('چاپ طول_آرایه([1,2,3]);')
+
 if __name__ == '__main__':
     unittest.main()
-
-    def test_format_date(self):
-        self.run_code('چاپ فرمت_تاریخ("امروز %Y/%m/%d");')
-
-    def test_str_repeat(self):
-        self.run_code('چاپ تکرار_رشته("ها", 3);')
-
-    def test_typeof(self):
-        self.run_code('x = 10; چاپ نوع(x);')
-
-    def test_array_len(self):
-        self.run_code('چاپ طول_آرایه([1,2,3]);')
-
-    def test_format_date(self):
-        self.run_code('چاپ فرمت_تاریخ("امروز %Y/%m/%d");')
-
-    def test_str_repeat(self):
-        self.run_code('چاپ تکرار_رشته("ها", 3);')
-
-    def test_typeof(self):
-        self.run_code('x = 10; چاپ نوع(x);')
-
-    def test_array_len(self):
-        self.run_code('چاپ طول_آرایه([1,2,3]);')
-
-    def test_format_date(self):
-        self.run_code('چاپ فرمت_تاریخ("امروز %Y/%m/%d");')
-
-    def test_str_repeat(self):
-        self.run_code('چاپ تکرار_رشته("ها", 3);')
-
-    def test_typeof(self):
-        self.run_code('x = 10; چاپ نوع(x);')
-
-    def test_array_len(self):
-        self.run_code('چاپ طول_آرایه([1,2,3]);')
