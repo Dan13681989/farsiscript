@@ -1,12 +1,11 @@
 #!/bin/bash
-if [ "$1" = "repl" ]; then
-    python3 -m farsiscript.main repl
-elif [ "$1" = "fmt" ]; then
-    python3 -m farsiscript.main fmt "$@"
-elif [ "$1" = "debug" ]; then
-    python3 -m farsiscript.main debug "$@"
-elif [ "$1" = "install" ]; then
-    python3 -m farsiscript.main install "$@"
-else
-    python3 -m farsiscript.compiler "$@"
-fi
+case "$1" in
+    run)     python3 -m farsiscript.main run "${@:2}" ;;
+    compile) python3 -m farsiscript.compiler "${@:2}" ;;
+    repl)    python3 -m farsiscript.main repl ;;
+    fmt)     python3 -m farsiscript.main fmt "${@:2}" ;;
+    debug)   python3 -m farsiscript.main debug "${@:2}" ;;
+    install) python3 -m farsiscript.main install "${@:2}" ;;
+    check)   python3 -m farsiscript.main check "${@:2}" ;;
+    *)       echo "Unknown command: $1" ;;
+esac

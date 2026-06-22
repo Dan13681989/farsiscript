@@ -48,6 +48,11 @@ def main():
         print("Commands: compile, run, repl, fmt, debug, install")
         sys.exit(1)
     command = sys.argv[1]
+    if command == 'check':
+        from .type_checker import check_file
+        for filepath in sys.argv[2:]:
+            check_file(filepath)
+        return
     if command == 'repl':
         repl()
         return
