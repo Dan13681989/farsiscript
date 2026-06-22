@@ -53,9 +53,33 @@ class TestExtendedStdlib(unittest.TestCase):
     def test_write_file(self):
         self.run_code('چاپ نوشتن_فایل("test_fs_write.txt", "سلام");')
 
-
     def test_shamsi_date(self):
         self.run_code('چاپ تاریخ_شمسی();')
+
+    def test_pow(self):
+        self.run_code('چاپ توان(2, 3);')
+    def test_sin(self):
+        self.run_code('چاپ سینوس(0);')
+    def test_cos(self):
+        self.run_code('چاپ کسینوس(0);')
+    def test_log(self):
+        self.run_code('چاپ لگاریتم(1);')
+    def test_sort(self):
+        self.run_code('چاپ مرتب_سازی([3,1,2]);')
+    def test_list_files(self):
+        self.run_code('چاپ لیست_فایل_ها(".");')
+    def test_delete_file(self):
+        self.run_code('چاپ حذف_فایل("__temp_test_delete__.txt");')
+
+    def test_fetch_url(self):
+        self.run_code('چاپ دریافت_از_وب("https://httpbin.org/get");')
+
+    def test_json_read(self):
+        self.run_code('چاپ خواندن_جیسون("[1,2,3]");')
+
+    def test_json_write(self):
+        self.run_code('چاپ نوشتن_جیسون({"a":1});')
+
 
 if __name__ == '__main__':
     unittest.main()
@@ -75,3 +99,6 @@ if __name__ == '__main__':
 
     def test_str_strip(self):
         self.run_code('چاپ حذف_فاصله("   سلام   ");')
+
+    def test_json_read(self):
+        self.run_code('چاپ خواندن_جیسون(' + "'" + '{"a":1}' + "'" + ');')
