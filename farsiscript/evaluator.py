@@ -316,7 +316,7 @@ def evaluate(node, env, functions):
         else:
             raise Exception(f"نوع داده از عملیات نقطه پشتیبانی نمی‌کند")
     elif isinstance(node, ImportNode):
-        with open(node.file, 'r', encoding='utf-8') as f:
+        with open(node.filepath, 'r', encoding='utf-8') as f:
             code = f.read()
         from .tokenizer import Lexer
         from .parser import Parser
