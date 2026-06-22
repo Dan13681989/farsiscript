@@ -46,6 +46,14 @@ class TestExtendedStdlib(unittest.TestCase):
     def test_array_len(self):
         self.run_code('چاپ طول_آرایه([1,2,3]);')
 
+    def test_read_file(self):
+        self.run_code('نوشتن_فایل("test_fs_temp.txt", "محتوای تست");')
+        self.run_code('چاپ خواندن_فایل("test_fs_temp.txt");')
+
+    def test_write_file(self):
+        self.run_code('چاپ نوشتن_فایل("test_fs_write.txt", "سلام");')
+
+
 if __name__ == '__main__':
     unittest.main()
 

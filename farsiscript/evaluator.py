@@ -186,6 +186,13 @@ def evaluate(node, env, functions):
         elif node.name == 'نوع':
             return typeof(args[0])
         # --- User-defined functions ---
+        elif node.name == '\u062e\u0648\u0627\u0646\u062f\u0646_\u0641\u0627\u06cc\u0644':
+            with open(args[0], 'r', encoding='utf-8') as f:
+                return f.read()
+        elif node.name == '\u0646\u0648\u0634\u062a\u0646_\u0641\u0627\u06cc\u0644':
+            with open(args[0], 'w', encoding='utf-8') as f:
+                f.write(args[1])
+            return 1
         func = functions.get(node.name)
         if not func: raise Exception(f"تابع '{node.name}' تعریف نشده است")
         if not isinstance(func, Function): raise Exception(f"'{node.name}' یک کلاس است، نمی‌توان مستقیماً فراخوانی کرد")
