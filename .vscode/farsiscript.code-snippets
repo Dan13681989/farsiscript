@@ -1,0 +1,22 @@
+{
+  "Print": {
+    "prefix": "چاپ",
+    "body": "چاپ \"$1\";",
+    "description": "Print statement"
+  },
+  "If": {
+    "prefix": "اگر",
+    "body": "اگر ($1) {\n    $2\n}",
+    "description": "If block"
+  },
+  "While": {
+    "prefix": "تاوقتی",
+    "body": "تاوقتی ($1) {\n    $2\n}",
+    "description": "While loop"
+  },
+  "Function": {
+    "prefix": "تابع",
+    "body": "تابع $1($2) {\n    $3\n}",
+    "description": "Function definition"
+  }
+}

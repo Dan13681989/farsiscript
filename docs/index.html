@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head><meta charset="UTF-8"><title>FarsiScript Playground</title></head>
+<body>
+  <h2>FarsiScript Playground</h2>
+  <textarea id="code" rows="10" cols="50">چاپ "سلام دنیا!";</textarea><br>
+  <button onclick="run()">Run</button>
+  <pre id="output"></pre>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.29.0/full/pyodide.js"></script>
+  <script>
+    async function main() {
+      let pyodide = await loadPyodide();
+      await pyodide.loadPackage("micropip");
+      const micropip = pyodide.pyimport("micropip");
+      await micropip.install("farsiscript-lang");
+      window.run = () => {
+        const code = document.getElementById("code").value;
+        try {
+          const result = pyodide.runPython(`from farsiscript.main import run_farsi_script; run_farsi_script("""${code}""")`);
+          document.getElementById("output").textContent = result;
+        } catch (e) {
+          document.getElementById("output").textContent = "Error: " + e;
+        }
+      };
+    }
+    main();
+  </script>
+</body>
+</html>
