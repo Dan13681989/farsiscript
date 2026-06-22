@@ -271,6 +271,8 @@ def evaluate(node, env, functions):
         elif node.name == '\u0646\u0648\u0634\u062a\u0646_\u062c\u06cc\u0633\u0648\u0646':
             import json
             return json.dumps(args[0], ensure_ascii=False)
+        elif node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0631\u0634\u062a\u0647':
+            return str(args[0])
         func = functions.get(node.name)
         if not func: raise Exception(f"تابع '{node.name}' تعریف نشده است")
         if not isinstance(func, Function): raise Exception(f"'{node.name}' یک کلاس است، نمی‌توان مستقیماً فراخوانی کرد")
