@@ -35,3 +35,4 @@ jobs:
           echo 'چاپ "CI works!";' > test_ci.fs
           python -m farsiscript.compiler test_ci.fs
           ./test_ci
+# Updated CI test command
