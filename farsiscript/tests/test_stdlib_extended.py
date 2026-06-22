@@ -81,6 +81,19 @@ class TestExtendedStdlib(unittest.TestCase):
         self.run_code('چاپ نوشتن_جیسون({"a":1});')
 
 
+
+    def test_formatter(self):
+        from farsiscript.formatter import format_code
+        original = 'چاپ "سلام"'
+        formatted = format_code(original)
+        self.assertIn(';', formatted)
+
+    def test_debugger(self):
+        # debugger is interactive, just test import
+        from farsiscript.debugger import debug_code
+        self.assertTrue(callable(debug_code))
+
+
 if __name__ == '__main__':
     unittest.main()
 
