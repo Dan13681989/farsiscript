@@ -914,7 +914,7 @@ if __name__=='__main__':
         print("Usage: python compiler.py <input.fs> [output.c]"); sys.exit(1)
     inp = sys.argv[1]
     outc = sys.argv[2] if len(sys.argv)>2 else inp.replace('.fs','.c')
-    with open(inp,'r',encoding='utf-8') as f: code = f.read()
+    with open(inp,'r',encoding='utf-8') as f: code = f.read(); source_lines = code.split('\n'); source_lines = code.split('\n')
     exe = compile_to_c(code, outc)
     if exe:
         print("Running the compiled program:")

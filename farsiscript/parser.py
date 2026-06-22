@@ -86,9 +86,12 @@ class DotNode(ASTNode):
     def __init__(self, obj, attr): self.obj=obj; self.attr=attr
 
 class Parser:
-    def __init__(self, tokens):
+    def __init__(self, tokens, source_lines=None):
         self.tokens = tokens
         self.pos = 0
+        self.source_lines = source_lines or []
+        self.source_lines = source_lines or []
+        self.source_lines = source_lines or []
 
     def current_token(self):
         return self.tokens[self.pos] if self.pos < len(self.tokens) else None
@@ -101,7 +104,13 @@ class Parser:
         else:
             expected = token_type
             got = token.type if token else 'EOF'
-            raise SyntaxError(f"خطای نحوی در خط {token.line if token else '?'}، ستون {getattr(token, 'col', '?')}: انتظار {expected}، دریافت {got}")
+            col = token.col if token and hasattr(token, 'col') else '?'
+            src_line = self.source_lines[token.line-1] if token and hasattr(token, 'line') and token.line <= len(self.source_lines) else ''
+            pointer = ' ' * (int(col)-1) + '^' if col != '?' else ''
+            col = token.col if token and hasattr(token, 'col') else '?'
+            src_line = self.source_lines[token.line-1] if token and hasattr(token, 'line') and token.line <= len(self.source_lines) else ''
+            pointer = ' ' * (int(col)-1) + '^' if col != '?' else ''
+            raise SyntaxError(f"خطای نحوی در خط {token.line if token else '?'}، ستون {col}: انتظار {expected}، دریافت {got}\n{src_line.strip()}\n{pointer}")
 
     def parse(self):
         statements = []

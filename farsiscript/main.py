@@ -7,7 +7,9 @@ def run_farsi_script(code):
     """Interpret FarsiScript code string and print output."""
     lexer = Lexer(code)
     tokens = lexer.tokenize()
-    parser = Parser(tokens)
+    source_lines = code.split('\n')
+    source_lines = code.split('\n')
+    parser = Parser(tokens, source_lines)
     ast = parser.parse()
     env = Environment()
     functions = {}
