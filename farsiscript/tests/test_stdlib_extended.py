@@ -48,3 +48,10 @@ class TestExtendedStdlib(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+    def test_read_file(self):
+        self.run_code('نوشتن_فایل("test_fs_temp.txt", "محتوای تست");')
+        self.run_code('چاپ خواندن_فایل("test_fs_temp.txt");')
+
+    def test_write_file(self):
+        self.run_code('چاپ نوشتن_فایل("test_fs_write.txt", "سلام");')
