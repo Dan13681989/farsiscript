@@ -25,3 +25,8 @@ dependencies = []
 
 [project.scripts]
 fs = "farsiscript.main:main"
+
+[project.urls]
+Homepage = "https://github.com/Dan13681989/farsiscript"
+Repository = "https://github.com/Dan13681989/farsiscript.git"
+Issues = "https://github.com/Dan13681989/farsiscript/issues"
