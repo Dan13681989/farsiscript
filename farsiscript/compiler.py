@@ -70,6 +70,20 @@ def compile_to_c(code, output_c_file):
             if node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0631\u0634\u062a\u0647': return 'string'
             if node.name == '\u062e\u0637\u0627_\u0628\u062f\u0647': return 'void'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc': return 'string'
+            if node.name == '\u062a\u0648\u0627\u0646': return 'double'
+
+            if node.name == '\u0633\u06cc\u0646\u0648\u0633': return 'double'
+
+            if node.name == '\u06a9\u0633\u06cc\u0646\u0648\u0633': return 'double'
+
+            if node.name == '\u0644\u06af\u0627\u0631\u06cc\u062a\u0645': return 'double'
+
+            if node.name == '\u0645\u0631\u062a\u0628_\u0633\u0627\u0632\u06cc': return 'array'
+
+            if node.name == '\u0644\u06cc\u0633\u062a_\u0641\u0627\u06cc\u0644_\u0647\u0627': return 'string'
+
+            if node.name == '\u062d\u0630\u0641_\u0641\u0627\u06cc\u0644': return 'int'
+
             if node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647': return 'string'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632': return 'string'
             if node.name == '\u062d\u0630\u0641_\u0641\u0627\u0635\u0644\u0647': return 'string'
@@ -208,7 +222,9 @@ def compile_to_c(code, output_c_file):
         if func and (func, name) in param_types: return name
         return f'var_{name}'
 
-    c_code = '#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n#include <stdint.h>\n#include <setjmp.h>\n#include <signal.h>\n#include <time.h>\n\n'
+    c_code = '#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n#include <stdint.h>\n#include <setjmp.h>\n#include <signal.h>\n#include <time.h>\n\n#include <dirent.h>\n#include <math.h>\n'
+
+
 
     c_code += (
         'typedef struct DictEntry {\n'
@@ -448,6 +464,44 @@ def compile_to_c(code, output_c_file):
                 return f'str_strip({gen_expr(node.args[0], func_name, local_vars, decls)})'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc':
                 return 'shamsi_date()'
+            if node.name == '\u062a\u0648\u0627\u0646':
+
+                base = gen_expr(node.args[0], func_name, local_vars, decls)
+
+                exp = gen_expr(node.args[1], func_name, local_vars, decls)
+
+                return f'pow({base}, {exp})'
+
+            if node.name == '\u0633\u06cc\u0646\u0648\u0633':
+
+                return f'sin({gen_expr(node.args[0], func_name, local_vars, decls)})'
+
+            if node.name == '\u06a9\u0633\u06cc\u0646\u0648\u0633':
+
+                return f'cos({gen_expr(node.args[0], func_name, local_vars, decls)})'
+
+            if node.name == '\u0644\u06af\u0627\u0631\u06cc\u062a\u0645':
+
+                return f'log({gen_expr(node.args[0], func_name, local_vars, decls)})'
+
+            if node.name == '\u0645\u0631\u062a\u0628_\u0633\u0627\u0632\u06cc':
+
+                arr = gen_expr(node.args[0], func_name, local_vars, decls)
+
+                return f'(sort_array({arr}), {arr})'
+
+            if node.name == '\u0644\u06cc\u0633\u062a_\u0641\u0627\u06cc\u0644_\u0647\u0627':
+
+                path = gen_expr(node.args[0], func_name, local_vars, decls) if node.args else '"."'
+
+                return f'list_files({path})'
+
+            if node.name == '\u062d\u0630\u0641_\u0641\u0627\u06cc\u0644':
+
+                path = gen_expr(node.args[0], func_name, local_vars, decls)
+
+                return f'delete_file({path})'
+
             if node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0639\u062f\u062f':
                 arg = gen_expr(node.args[0], func_name, local_vars, decls)
                 return f'atof({arg})'
@@ -892,6 +946,66 @@ def compile_to_c(code, output_c_file):
     c_code += '    res[len] = \'\\0\';\n'
     c_code += '    return res;\n'
     c_code += '}\n\n'
+    c_code += 'void sort_array(double* arr) {\n'
+
+    c_code += '    int len = ((int*)arr)[-1];\n'
+
+    c_code += '    for (int i = 0; i < len-1; i++) {\n'
+
+    c_code += '        for (int j = 0; j < len-i-1; j++) {\n'
+
+    c_code += '            if (arr[j] > arr[j+1]) {\n'
+
+    c_code += '                double tmp = arr[j];\n'
+
+    c_code += '                arr[j] = arr[j+1];\n'
+
+    c_code += '                arr[j+1] = tmp;\n'
+
+    c_code += '            }\n'
+
+    c_code += '        }\n'
+
+    c_code += '    }\n'
+
+    c_code += '}\n\n'
+
+    c_code += 'char* list_files(const char* path) {\n'
+
+    c_code += '    DIR* d = opendir(path);\n'
+
+    c_code += '    if (!d) return NULL;\n'
+
+    c_code += '    struct dirent* dir;\n'
+
+    c_code += '    size_t size = 1024;\n'
+
+    c_code += '    char* buf = (char*)malloc(size);\n'
+
+    c_code += '    buf[0] = \'\\0\';\n'
+
+    c_code += '    while ((dir = readdir(d)) != NULL) {\n'
+
+    c_code += '        if (strcmp(dir->d_name, ".") == 0 || strcmp(dir->d_name, "..") == 0) continue;\n'
+
+    c_code += '        strcat(buf, dir->d_name);\n'
+
+    c_code += '        strcat(buf, "\\n");\n'
+
+    c_code += '    }\n'
+
+    c_code += '    closedir(d);\n'
+
+    c_code += '    return buf;\n'
+
+    c_code += '}\n\n'
+
+    c_code += 'int delete_file(const char* path) {\n'
+
+    c_code += '    return remove(path) == 0;\n'
+
+    c_code += '}\n\n'
+
     c_code += 'int main() {\n'
     c_code += '    srand(time(NULL));\n'
     c_code += '    srand(time(NULL));\n'
