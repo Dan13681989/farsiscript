@@ -4,10 +4,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)
 ![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)
-![Build 
-Status](https://github.com/Dan13681989/farsiscript/actions/workflows/test.yml/badge.svg)
 
-<div dir="rtl">
 
 یک زبان برنامه‌نویسی کاملاً فارسی با **مفسر (interpreter)** و **کامپایلر به زبان C**.
 
