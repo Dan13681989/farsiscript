@@ -210,10 +210,16 @@ def evaluate(node, env, functions):
             return time.ctime()
         elif node.name == 'عدد_تصادفی':
             return random.randint(int(args[0]), int(args[1]))
-        elif node.name == '\u0627\u062c\u0631\u0627':
-            import subprocess
-            cmd = args[0]
-            return subprocess.getoutput(cmd)
+        elif node.name == 'اجرا':
+            return os.system(args[0])
+        elif node.name == 'فرمت_تاریخ':
+            return time.strftime(args[0], time.localtime())
+        elif node.name == 'تکرار_رشته':
+            return args[0] * int(args[1])
+        elif node.name == 'طول_آرایه':
+            return len(args[0])
+        elif node.name == 'نوع':
+            return typeof(args[0])
         # --- User-defined functions ---
         elif node.name == '\u062e\u0648\u0627\u0646\u062f\u0646_\u0641\u0627\u06cc\u0644':
             with open(args[0], 'r', encoding='utf-8') as f:
@@ -238,41 +244,6 @@ def evaluate(node, env, functions):
             return datetime.date.today().isoformat()
         elif node.name == '\u062d\u0630\u0641_\u0641\u0627\u0635\u0644\u0647':
             return args[0].strip()
-        elif node.name == '\u062a\u0648\u0627\u0646':
-            return args[0] ** args[1]
-        elif node.name == '\u0633\u06cc\u0646\u0648\u0633':
-            import math
-            return math.sin(args[0])
-        elif node.name == '\u06a9\u0633\u06cc\u0646\u0648\u0633':
-            import math
-            return math.cos(args[0])
-        elif node.name == '\u0644\u06af\u0627\u0631\u06cc\u062a\u0645':
-            import math
-            return math.log(args[0])
-        elif node.name == '\u0645\u0631\u062a\u0628_\u0633\u0627\u0632\u06cc':
-            return sorted(args[0])
-        elif node.name == '\u0644\u06cc\u0633\u062a_\u0641\u0627\u06cc\u0644_\u0647\u0627':
-            import os
-            return '\n'.join(os.listdir(args[0] if args else '.'))
-        elif node.name == '\u062d\u0630\u0641_\u0641\u0627\u06cc\u0644':
-            import os
-            os.remove(args[0])
-            return 1
-        elif node.name == '\u062f\u0631\u06cc\u0627\u0641\u062a_\u0627\u0632_\u0648\u0628':
-            import urllib.request
-            try:
-                with urllib.request.urlopen(args[0]) as resp:
-                    return resp.read().decode('utf-8')
-            except Exception as e:
-                return f'خطا: {e}'
-        elif node.name == '\u062e\u0648\u0627\u0646\u062f\u0646_\u062c\u06cc\u0633\u0648\u0646':
-            import json
-            return json.loads(args[0])
-        elif node.name == '\u0646\u0648\u0634\u062a\u0646_\u062c\u06cc\u0633\u0648\u0646':
-            import json
-            return json.dumps(args[0], ensure_ascii=False)
-        elif node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0631\u0634\u062a\u0647':
-            return str(args[0])
         func = functions.get(node.name)
         if not func: raise Exception(f"تابع '{node.name}' تعریف نشده است")
         if not isinstance(func, Function): raise Exception(f"'{node.name}' یک کلاس است، نمی‌توان مستقیماً فراخوانی کرد")
@@ -318,7 +289,7 @@ def evaluate(node, env, functions):
         else:
             raise Exception(f"نوع داده از عملیات نقطه پشتیبانی نمی‌کند")
     elif isinstance(node, ImportNode):
-        with open(node.filepath, 'r', encoding='utf-8') as f:
+        with open(node.file, 'r', encoding='utf-8') as f:
             code = f.read()
         from .tokenizer import Lexer
         from .parser import Parser
