@@ -1,4 +1,5 @@
 import sys
+import datetime
 import math
 import os
 import time
@@ -18,6 +19,40 @@ def typeof(val):
     if isinstance(val, float): return 'float'
     if isinstance(val, str): return 'string'
     return type(val).__name__
+
+
+def gregorian_to_jalali(g_y, g_m, g_d):
+    g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    j_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29]
+    gy = g_y - 1600
+    gm = g_m - 1
+    g_day_no = 365 * gy + (gy + 3) // 4 - (gy + 99) // 100 + (gy + 399) // 400
+    for i in range(gm):
+        g_day_no += g_days_in_month[i]
+    if gm > 1 and ((g_y % 4 == 0 and g_y % 100 != 0) or (g_y % 400 == 0)):
+        g_day_no += 1
+    g_day_no += g_d - 1
+    j_day_no = g_day_no - 79
+    j_np = j_day_no // 12053
+    j_day_no %= 12053
+    jy = 979 + 33 * j_np + 4 * (j_day_no // 1461)
+    j_day_no %= 1461
+    if j_day_no >= 366:
+        jy += (j_day_no - 1) // 365
+        j_day_no = (j_day_no - 1) % 365
+    for i in range(11):
+        if j_day_no >= j_days_in_month[i]:
+            j_day_no -= j_days_in_month[i]
+        else:
+            break
+    jm = i + 1
+    jd = j_day_no + 1
+    return jy, jm, jd
+
+def jalali_date():
+    now = datetime.datetime.now()
+    jy, jm, jd = gregorian_to_jalali(now.year, now.month, now.day)
+    return f"{jy}/{jm:02d}/{jd:02d}"
 
 class BreakException(Exception): pass
 class ContinueException(Exception): pass
@@ -193,6 +228,15 @@ def evaluate(node, env, functions):
             with open(args[0], 'w', encoding='utf-8') as f:
                 f.write(args[1])
             return 1
+        elif node.name == '\u062e\u0648\u0627\u0646\u062f\u0646_\u0641\u0627\u06cc\u0644':
+            with open(args[0], 'r', encoding='utf-8') as f:
+                return f.read()
+        elif node.name == '\u0646\u0648\u0634\u062a\u0646_\u0641\u0627\u06cc\u0644':
+            with open(args[0], 'w', encoding='utf-8') as f:
+                f.write(args[1])
+            return 1
+        elif node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc':
+            return jalali_date()
         func = functions.get(node.name)
         if not func: raise Exception(f"تابع '{node.name}' تعریف نشده است")
         if not isinstance(func, Function): raise Exception(f"'{node.name}' یک کلاس است، نمی‌توان مستقیماً فراخوانی کرد")

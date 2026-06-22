@@ -54,6 +54,9 @@ class TestExtendedStdlib(unittest.TestCase):
         self.run_code('چاپ نوشتن_فایل("test_fs_write.txt", "سلام");')
 
 
+    def test_shamsi_date(self):
+        self.run_code('چاپ تاریخ_شمسی();')
+
 if __name__ == '__main__':
     unittest.main()
 
