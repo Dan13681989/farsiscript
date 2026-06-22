@@ -66,3 +66,12 @@ if __name__ == '__main__':
 
     def test_write_file(self):
         self.run_code('چاپ نوشتن_فایل("test_fs_write.txt", "سلام");')
+
+    def test_str_reverse(self):
+        self.run_code('چاپ برعکس_رشته("سلام");')
+
+    def test_today_date(self):
+        self.run_code('چاپ تاریخ_امروز();')
+
+    def test_str_strip(self):
+        self.run_code('چاپ حذف_فاصله("   سلام   ");')

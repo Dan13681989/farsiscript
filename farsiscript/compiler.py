@@ -15,7 +15,7 @@ def safe_name(name):
 
 def compile_to_c(code, output_c_file):
     lexer = Lexer(code); tokens = lexer.tokens
-    parser = Parser(tokens); ast = parser.parse()
+    parser = Parser(tokens, source_lines); ast = parser.parse()
 
     functions = {}; statements = []
     classes = {}
@@ -70,6 +70,9 @@ def compile_to_c(code, output_c_file):
             if node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0631\u0634\u062a\u0647': return 'string'
             if node.name == '\u062e\u0637\u0627_\u0628\u062f\u0647': return 'void'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc': return 'string'
+            if node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647': return 'string'
+            if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632': return 'string'
+            if node.name == '\u062d\u0630\u0641_\u0641\u0627\u0635\u0644\u0647': return 'string'
             if node.name == '\u0632\u0645\u0627\u0646_\u0627\u06a9\u0646\u0648\u0646': return 'string'
             if node.name == '\u0639\u062f\u062f_\u062a\u0635\u0627\u062f\u0641\u06cc': return 'int'
             if node.name == '\u0627\u062c\u0631\u0627': return 'int'
@@ -436,6 +439,12 @@ def compile_to_c(code, output_c_file):
                 path = gen_expr(node.args[0], func_name, local_vars, decls)
                 content = gen_expr(node.args[1], func_name, local_vars, decls)
                 return f'write_file({path}, {content})'
+            if node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647':
+                return f'str_reverse({gen_expr(node.args[0], func_name, local_vars, decls)})'
+            if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632':
+                return 'today_date()'
+            if node.name == '\u062d\u0630\u0641_\u0641\u0627\u0635\u0644\u0647':
+                return f'str_strip({gen_expr(node.args[0], func_name, local_vars, decls)})'
             if node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc':
                 return 'shamsi_date()'
             if node.name == '\u062a\u0628\u062f\u06cc\u0644_\u0628\u0647_\u0639\u062f\u062f':
@@ -857,6 +866,30 @@ def compile_to_c(code, output_c_file):
     c_code += '    static char buf[32];\n'
     c_code += '    sprintf(buf, "%d/%02d/%02d", jy, jm, jd);\n'
     c_code += '    return buf;\n'
+    c_code += '}\n\n'
+    c_code += 'char* str_reverse(const char* s) {\n'
+    c_code += '    size_t len = strlen(s);\n'
+    c_code += '    char* rev = (char*)malloc(len + 1);\n'
+    c_code += '    for (size_t i = 0; i < len; i++) rev[i] = s[len-1-i];\n'
+    c_code += '    rev[len] = \'\\0\';\n'
+    c_code += '    return rev;\n'
+    c_code += '}\n\n'
+    c_code += 'char* today_date() {\n'
+    c_code += '    time_t t = time(NULL);\n'
+    c_code += '    struct tm* tm = localtime(&t);\n'
+    c_code += '    static char buf[16];\n'
+    c_code += '    sprintf(buf, "%04d-%02d-%02d", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday);\n'
+    c_code += '    return buf;\n'
+    c_code += '}\n\n'
+    c_code += 'char* str_strip(const char* s) {\n'
+    c_code += '    while (*s == \' \' || *s == \'\\t\' || *s == \'\\n\' || *s == \'\\r\') s++;\n'
+    c_code += '    const char* end = s + strlen(s) - 1;\n'
+    c_code += '    while (end > s && (*end == \' \' || *end == \'\\t\' || *end == \'\\n\' || *end == \'\\r\')) end--;\n'
+    c_code += '    size_t len = end - s + 1;\n'
+    c_code += '    char* res = (char*)malloc(len + 1);\n'
+    c_code += '    strncpy(res, s, len);\n'
+    c_code += '    res[len] = \'\\0\';\n'
+    c_code += '    return res;\n'
     c_code += '}\n\n'
     c_code += 'int main() {\n'
     c_code += '    srand(time(NULL));\n'

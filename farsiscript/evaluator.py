@@ -237,6 +237,13 @@ def evaluate(node, env, functions):
             return 1
         elif node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0634\u0645\u0633\u06cc':
             return jalali_date()
+        elif node.name == '\u0628\u0631\u0639\u06a9\u0633_\u0631\u0634\u062a\u0647':
+            return args[0][::-1]
+        elif node.name == '\u062a\u0627\u0631\u06cc\u062e_\u0627\u0645\u0631\u0648\u0632':
+            import datetime
+            return datetime.date.today().isoformat()
+        elif node.name == '\u062d\u0630\u0641_\u0641\u0627\u0635\u0644\u0647':
+            return args[0].strip()
         func = functions.get(node.name)
         if not func: raise Exception(f"تابع '{node.name}' تعریف نشده است")
         if not isinstance(func, Function): raise Exception(f"'{node.name}' یک کلاس است، نمی‌توان مستقیماً فراخوانی کرد")
