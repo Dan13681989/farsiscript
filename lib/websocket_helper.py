@@ -1,6 +1,6 @@
 import sys, asyncio, websockets
 
-async def echo(websocket, path):
+async def echo(websocket):
     async for message in websocket:
         await websocket.send(f"Echo: {message}")
 
