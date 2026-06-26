@@ -1,20 +1,16 @@
-# مشارکت در فارسی‌اسکریپت
+# Contributing to FarsiScript
 
-از شما برای تمایل به مشارکت سپاسگزاریم!
+Thank you for your interest in contributing!
 
-## نحوهٔ مشارکت
+## How to help
+- Report bugs via [Issues](https://github.com/Dan13681989/farsiscript/issues)
+- Add new standard library functions
+- Improve documentation
+- Write tests
 
-1. مخزن را fork کنید.
-2. یک شاخه برای ویژگی/رفع اشکال جدید بسازید.
-3. تغییرات خود را commit کنید.
-4. یک Pull Request باز کنید.
-
-## استانداردهای کدنویسی
-
-- کدها باید با Python 3.10+ سازگار باشند.
-- نام توابع و متغیرها به انگلیسی باشد.
-- برای توابع جدید، در پوشهٔ `tests/` تست اضافه کنید.
-
-## گزارش اشکال
-
-لطفاً در بخش Issues، شرح دقیق مشکل، مراحل بازتولید و خروجی مورد انتظار را بنویسید.
+## Getting started
+1. Fork the repository
+2. Clone your fork
+3. Install the package: `pip install -e .`
+4. Run tests: `python -m unittest farsiscript.tests.test_stdlib_extended -v`
+5. Make changes and open a pull request
