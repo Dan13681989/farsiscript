@@ -1,0 +1,14 @@
+{
+  "name": "farsiscript-lsp",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.60.0" },
+  "activationEvents": [ "onLanguage:farsiscript" ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [{
+      "id": "farsiscript",
+      "extensions": [".fs"],
+      "configuration": "./language-configuration.json"
+    }]
+  }
+}
