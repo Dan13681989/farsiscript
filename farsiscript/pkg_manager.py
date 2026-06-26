@@ -1,42 +1,42 @@
-#!/usr/bin/env python3
-"""Simple package manager for FarsiScript libraries."""
-import sys
-import os
-import subprocess
+import sys, os, subprocess, json, urllib.request
 
 LIB_DIR = os.path.expanduser("~/.farsiscript/lib")
+REGISTRY_URL = "https://raw.githubusercontent.com/Dan13681989/farsiscript/main/registry/registry.json"
 
-def install(url):
+def load_registry():
+    with urllib.request.urlopen(REGISTRY_URL) as r:
+        return json.loads(r.read())
+
+def install(pkg_name):
     os.makedirs(LIB_DIR, exist_ok=True)
-    repo_name = url.rstrip('/').split('/')[-1].replace('.git', '')
-    target = os.path.join(LIB_DIR, repo_name)
-    if os.path.exists(target):
-        print(f"Package '{repo_name}' already installed.")
+    registry = load_registry()
+    info = registry["packages"].get(pkg_name)
+    if not info:
+        print(f"Package '{pkg_name}' not found.")
         return
-    subprocess.run(["git", "clone", url, target])
-    print(f"Package '{repo_name}' installed to {target}")
+    target_dir = os.path.join(LIB_DIR, pkg_name)
+    if os.path.exists(target_dir):
+        print(f"Package '{pkg_name}' already installed.")
+        return
+    subprocess.run(["git", "clone", info["repo"], target_dir])
+    print(f"Package '{pkg_name}' installed.")
 
 def list_packages():
-    if not os.path.isdir(LIB_DIR):
-        print("No packages installed.")
-        return
-    for name in os.listdir(LIB_DIR):
-        print(name)
+    registry = load_registry()
+    for name, info in registry["packages"].items():
+        print(f"{name} ({info['version']}) - {info['repo']}")
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: fs install <url>")
+        print("Usage: fs install <command>")
         sys.exit(1)
-    command = sys.argv[1]
-    if command == 'install':
+    cmd = sys.argv[1]
+    if cmd == "install":
         if len(sys.argv) < 3:
-            print("Usage: fs install <url>")
+            print("Usage: fs install install <package>")
         else:
             install(sys.argv[2])
-    elif command == 'list':
+    elif cmd == "list":
         list_packages()
     else:
-        print(f"Unknown command: {command}")
-
-if __name__ == '__main__':
-    main()
+        print(f"Unknown command: {cmd}")

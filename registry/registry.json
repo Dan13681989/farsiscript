@@ -1,0 +1,16 @@
+{
+  "packages": {
+    "turtle": {
+      "name": "turtle",
+      "repo": "https://github.com/Dan13681989/farsiscript.git",
+      "path": "lib/turtle.fs",
+      "version": "1.0.0"
+    },
+    "database": {
+      "name": "database",
+      "repo": "https://github.com/Dan13681989/farsiscript.git",
+      "path": "lib/database.fs",
+      "version": "1.0.0"
+    }
+  }
+}
