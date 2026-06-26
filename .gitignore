@@ -37,3 +37,4 @@ test_*
 examples/*.c
 __pycache__/
 vscode-extension/node_modules/
+vscode-extension/node_modules/
